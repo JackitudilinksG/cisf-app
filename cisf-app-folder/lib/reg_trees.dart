@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_supabase_test/main.dart';
 
 class TreesScreen extends StatelessWidget {
   const TreesScreen({super.key});
@@ -49,32 +48,67 @@ class TreesScreen extends StatelessWidget {
                     )
                   ),
                   Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 32, 0, 0),
-                  child: Container(
-                    width: MediaQuery.sizeOf(context).width * 0.7,
-                    height: MediaQuery.sizeOf(context).height * 0.3,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFD9D9D9),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.camera_alt,
-                            color: Color(0xFF0EBD8D),
-                            size: 45,
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 32, 0, 0),
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).width * 0.7,
+                      height: MediaQuery.sizeOf(context).height * 0.4,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFD9D9D9),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.camera_alt,
+                              color: Color(0xFF0EBD8D),
+                              size: 45,
+                            ),
+                            onPressed: () {
+                              print('IconButton pressed ...');
+                            },
                           ),
-                          onPressed: () {
-                            print('IconButton pressed ...');
-                          },
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
+                  Align(
+                    alignment: AlignmentDirectional(-1, 0),
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(32, 16, 0, 0),
+                      child: Container(
+                        child: const Text(
+                          'Enter Plant Details',
+                          style: TextStyle(
+                            fontFamily: 'Readex Pro',
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      height: MediaQuery.sizeOf(context).height * 0.1,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(0, 55, 55, 144),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Text(
+                        'Plant Species',
+                        style: TextStyle(
+                          fontFamily: 'Readex Pro',
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    ),
+                  ),
                 ]
               )
             )

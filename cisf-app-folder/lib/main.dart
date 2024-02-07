@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
         // This is the theme of your application.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        scaffoldBackgroundColor: const Color(0xFFF9F9F9)
       ),
       home: const MyHomePage(title: 'CISF TEST RUNS'),
     );
@@ -69,92 +70,93 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-          // ignore: sort_child_properties_last
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  const Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Icon(
-                          Icons.fingerprint_rounded,
-                          size: 30,
-                        ),
-                        Text(
-                          'GeoTag',
-                          style: TextStyle(
-                                  fontFamily: 'Readex Pro',
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w300,
-                          )
-                        ),
-                        Icon(
-                            Icons.blur_on,
-                            color: Colors.black,
-                            size: 30,
-                        ),
-                      ],
-                    )
-                  ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-                    child: Container(
-                      width: double.infinity,
-                      height: MediaQuery.sizeOf(context).height * 0.05,
-                      decoration: const BoxDecoration(
-                        color: Color(0x1AFFC600),
-                      ),
-                      child: const Row(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
+                      child: Row(
                         mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Align(
-                            alignment: AlignmentDirectional(-1, 0),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(18, 0, 0, 0),
-                              child: Icon(
-                                Icons.bedtime,
-                                color: Color(0xFFFEBF37),
-                                size: 24,
-                              ),
-                            ),
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Icon(
+                            Icons.fingerprint_rounded,
+                            size: 30,
                           ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(95, 0, 0, 0),
-                            child: Text(
-                              'Plant Fact of the Day!',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                          Text(
+                            'GeoTag',
+                            style: TextStyle(
+                                    fontFamily: 'Readex Pro',
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w300,
+                            )
+                          ),
+                          Icon(
+                              Icons.blur_on,
+                              color: Colors.black,
+                              size: 30,
                           ),
                         ],
-                      ),
+                      )
                     ),
-                  ),
-                  const Align(
-                    alignment: AlignmentDirectional(-1, 0),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(8, 32, 0, 0),
-                        child: Text(
-                          'Planted by me',
-                          style: TextStyle(
-                                fontFamily: 'Readex Pro',
-                                fontSize: 17,
-                                fontWeight: FontWeight.w600,
-                          ),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                      child: Container(
+                        width: double.infinity,
+                        height: MediaQuery.sizeOf(context).height * 0.05,
+                        decoration: const BoxDecoration(
+                          color: Color(0x1AFFC600),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Align(
+                              alignment: AlignmentDirectional(-1, 0),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(18, 0, 0, 0),
+                                child: Icon(
+                                  Icons.bedtime,
+                                  color: Color(0xFFFEBF37),
+                                  size: 24,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(95, 0, 0, 0),
+                              child: Text(
+                                'Plant Fact of the Day!',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                  ),
-                  Expanded(
-                    child: StreamBuilder<List<Map<String, dynamic>>>(
-                      stream: _treesStream,
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Center(child: CircularProgressIndicator());
-                        }
-                        final trees = snapshot.data!;
+                    ),
+                    const Align(
+                      alignment: AlignmentDirectional(-1, 0),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(8, 32, 0, 0),
+                          child: Text(
+                            'Planted by me',
+                            style: TextStyle(
+                                  fontFamily: 'Readex Pro',
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: StreamBuilder<List<Map<String, dynamic>>>(
+                        stream: _treesStream,
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Center(child: CircularProgressIndicator());
+                          }
+                          final trees = snapshot.data!;
                           return Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(8, 10, 8, 10),
                             child: ListView.builder(
@@ -163,24 +165,27 @@ class _MyHomePageState extends State<MyHomePage> {
                               scrollDirection: Axis.vertical,
                               itemCount: trees.length,
                               itemBuilder: (context, index) {
-                                return Container(
-                                  width: MediaQuery.sizeOf(context).width,
-                                  height: MediaQuery.sizeOf(context).height * 0.1,
-                                  decoration: BoxDecoration(
-                                  color: const Color(0xFF15D48A),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Align(
-                                    alignment: const AlignmentDirectional(0, 0),
-                                    child: Text(
-                                      trees[index]['plant_name'],
-                                      style: const TextStyle(
-                                            fontFamily: 'Readex Pro',
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                          ),
+                                return Padding(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                                  child: Container(
+                                    width: MediaQuery.sizeOf(context).width,
+                                    height: MediaQuery.sizeOf(context).height * 0.1,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF15D48A),
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
-                                  )
+                                    child: Align(
+                                      alignment: const AlignmentDirectional(0, 0),
+                                      child: Text(
+                                        trees[index]['plant_name'],
+                                        style: const TextStyle(
+                                              fontFamily: 'Readex Pro',
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                        ),
+                                      ),
+                                    )
+                                  ),
                                 );
                               }
                             )
@@ -190,7 +195,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ],
                 )
-          ),
+              )
+            ),
 
           Align(
             alignment: const AlignmentDirectional(0, 1),
