@@ -75,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
+                    //appbar
                     const Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
                       child: Row(
@@ -102,6 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       )
                     ),
+                    //plant fact
                     Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
                       child: Container(
@@ -184,6 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           color: const Color(0xFF15D48A),
                                           borderRadius: BorderRadius.circular(8),
                                         ),
+                                        //text
                                         child: Align(
                                           alignment: const AlignmentDirectional(0, 0),
                                           child: Text(
