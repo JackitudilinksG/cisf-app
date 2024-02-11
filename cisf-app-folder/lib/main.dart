@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_supabase_test/tree_details.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'reg_trees.dart';
 
@@ -150,48 +151,59 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height,
-                      child: StreamBuilder<List<Map<String, dynamic>>>(
-                        stream: _treesStream,
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return const Center(child: CircularProgressIndicator());
-                          }
-                          final trees = snapshot.data!;
-                          return Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(8, 10, 8, 10),
-                            child: ListView.builder(
-                              padding: EdgeInsets.zero,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              itemCount: trees.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-                                  child: Container(
-                                    width: MediaQuery.sizeOf(context).width,
-                                    height: MediaQuery.sizeOf(context).height * 0.1,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFF15D48A),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Align(
-                                      alignment: const AlignmentDirectional(0, 0),
-                                      child: Text(
-                                        trees[index]['plant_name'],
-                                        style: const TextStyle(
-                                              fontFamily: 'Readex Pro',
-                                              color: Colors.white,
-                                              fontSize: 20,
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 50),
+                        child: StreamBuilder<List<Map<String, dynamic>>>(
+                          stream: _treesStream,
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const Center(child: CircularProgressIndicator());
+                            }
+                            final trees = snapshot.data!;
+                            return Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(8, 10, 8, 10),
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                itemCount: trees.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                                    child: InkWell(
+                                      onTap: () async {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => const TreeDetails()),
+                                        );
+                                      },
+                                      child: Container(
+                                        width: MediaQuery.sizeOf(context).width,
+                                        height: MediaQuery.sizeOf(context).height * 0.1,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFF15D48A),
+                                          borderRadius: BorderRadius.circular(8),
                                         ),
+                                        child: Align(
+                                          alignment: const AlignmentDirectional(0, 0),
+                                          child: Text(
+                                            trees[index]['plant_name'],
+                                            style: const TextStyle(
+                                                  fontFamily: 'Readex Pro',
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                            ),
+                                          ),
+                                        )
                                       ),
                                     )
-                                  ),
-                                );
-                              }
-                            )
-                          );
-                        },
-                      ),
+                                  );
+                                }
+                              )
+                            );
+                          },
+                        ),
+                      )
                     ),
                   ],
                 )
@@ -209,9 +221,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     highlightColor: Colors.transparent,
                     onTap: () {
                         Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => TreesScreen()),
-                      );
+                          context,
+                          MaterialPageRoute(builder: (context) => const TreesScreen()),
+                        );
                     },
                     child: Container(
                       width: double.infinity,
