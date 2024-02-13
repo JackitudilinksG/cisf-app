@@ -7,15 +7,23 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(
-    url: 'https://bfricjhryglpdwziprqo.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmcmljamhyeWdscGR3emlwcnFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDY4OTk5NTgsImV4cCI6MjAyMjQ3NTk1OH0.uQPVT6C5KNBIMbTyI40ZdGh8K0ONTNl90SI-t1Bj5z0',
+    url: 'https://aurbkjxpkigrffqylkce.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1cmJranhwa2lncmZmcXlsa2NlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDcxMDY1NjUsImV4cCI6MjAyMjY4MjU2NX0.R9-GNk7fI_1c-uX0zfKg6aHsgIUftSu_uVGjWzQSXgw',
   );
   runApp(const MyApp());
 }
 
+class SupabaseService {
+  static final SupabaseService _instance = SupabaseService._internal();
+  factory SupabaseService() => _instance;
+  SupabaseService._internal();
+
+  final SupabaseClient client = Supabase.instance.client;
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
+  
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -53,8 +61,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final _treesStream = 
-    Supabase.instance.client.from('trees').stream(primaryKey: {'id'}.toList());
-
+    Supabase.instance.client.from('Plant').stream(primaryKey: {'id'}.toList());
+  
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -176,7 +184,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                       onTap: () async {
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) => const TreeDetails()),
+                                          MaterialPageRoute(
+                                            builder: (context) => TreeDetails(
+                                              id: trees[index]['id'],
+                                              sciName: trees[index]['sci_name'],
+                                              name: trees[index]['name'],
+                                              date: trees[index]['date'],
+                                              number: trees[index]['number']
+                                            )
+                                          ),
                                         );
                                       },
                                       child: Container(
@@ -190,7 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         child: Align(
                                           alignment: const AlignmentDirectional(0, 0),
                                           child: Text(
-                                            trees[index]['plant_name'],
+                                            trees[index]['sci_name'],
                                             style: const TextStyle(
                                                   fontFamily: 'Readex Pro',
                                                   color: Colors.white,

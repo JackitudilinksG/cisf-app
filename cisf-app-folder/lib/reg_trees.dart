@@ -3,6 +3,7 @@ import 'package:flutter_supabase_test/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:location/location.dart';
 
+
 class LocationService {
   Location location = Location();
 
@@ -20,9 +21,12 @@ class TreesScreen extends StatefulWidget {
 
 class _TreesScreenState extends State<TreesScreen> {
   final TextEditingController _controller = TextEditingController();
-  String value = 'check code, something wrong';
+  String? sciName = 'check code, something wrong';
   late DateTime _datePicked;
   final LocationService locationService = LocationService();
+  String? latitude;
+  String? longitude;
+
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +159,7 @@ class _TreesScreenState extends State<TreesScreen> {
                         ),
                         onChanged: (newValue) {
                           // Update the value variable whenever the text field changes
-                          value = newValue;
+                          sciName = newValue;
                         },
                     )
                   ),
@@ -283,11 +287,18 @@ class _TreesScreenState extends State<TreesScreen> {
                         highlightColor: Colors.transparent,
                         onTap: () async {
                           await Supabase.instance.client
-                          .from('trees')
+                          .from('Plant')
                           .insert({
-                            'plant_name': value,
-                            'date': _datePicked.toIso8601String(), 
-                            'location': locationService
+                            'name': 'test sample text',
+                            'sci_name': sciName,
+                            'date': '${_datePicked.year}-${_datePicked.month}-${_datePicked.day}',
+                            'qr_code': 'test sample text',
+                            'img_link': 'test sample text',
+                            'desc': 'test sample text',
+                            'location': 'test sample text',
+                            'number': 6969,
+                            'latitude': latitude,
+                            'longitude': longitude,
                           });
                           // ignore: use_build_context_synchronously
                           Navigator.push(
