@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -103,17 +103,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                     fontWeight: FontWeight.w300,
                             )
                           ),
-                          Icon(
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 20, 0),
+                            child: Icon(
                               Icons.blur_on,
                               color: Colors.black,
                               size: 30,
+                            ),
                           ),
                         ],
                       )
                     ),
                     //plant fact
                     Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 20, 0),
                       child: Container(
                         width: double.infinity,
                         height: MediaQuery.sizeOf(context).height * 0.05,
@@ -179,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 itemCount: trees.length,
                                 itemBuilder: (context, index) {
                                   return Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                                    padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 20, 0),
                                     child: InkWell(
                                       onTap: () async {
                                         Navigator.push(
@@ -190,7 +193,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                               sciName: trees[index]['sci_name'],
                                               name: trees[index]['name'],
                                               date: trees[index]['date'],
-                                              number: trees[index]['number']
+                                              number: trees[index]['number'],
+                                              desc: trees[index]['desc']
                                             )
                                           ),
                                         );
@@ -229,45 +233,54 @@ class _MyHomePageState extends State<MyHomePage> {
               )
             ),
 
-          Align(
-            alignment: const AlignmentDirectional(0, 1),
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(36, 0, 36, 20),
+            Align(
+              alignment: const AlignmentDirectional(0, 1),
+              child: Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(36, 0, 36, 20),
                   child: InkWell(
-                    splashColor: Colors.transparent,
-                    focusColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const TreesScreen()),
-                        );
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      height: MediaQuery.sizeOf(context).height * 0.05,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF15D48A),
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: const Align(
-                        alignment: AlignmentDirectional(0, 0),
-                        child: Text(
-                          'Add new plant',
-                          style: TextStyle(
-                                fontFamily: 'Readex Pro',
-                                color: Colors.white,
-                                fontSize: 18,
-                          ),
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const TreesScreen()),
+                    );
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: MediaQuery.sizeOf(context).height * 0.05,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF15D48A),
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color.fromARGB(255, 87, 87, 87),
+                          blurRadius: 5.0,
+                          spreadRadius: 2,
+                          offset: Offset(0,6)
                         )
-                      )
+                      ],
                     ),
+                    child: const Align(
+                      alignment: AlignmentDirectional(0, 0),
+                      child: Text(
+                        'Add new plant',
+                        style: TextStyle(
+                            fontFamily: 'Readex Pro',
+                            color: Colors.white,
+                            fontSize: 18,
+                        ),
+                      )
+                    )
+                  ),
                 )
-          )
-        )],
+              )
+            )
+          ],
         )
-        ),
-      );
-    }
+      ),
+    );
+  }
 }
