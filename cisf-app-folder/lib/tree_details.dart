@@ -1,55 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class TreeDetails extends StatefulWidget {
   final int id;
-  final String sciName;
-  final String name;
-  final String date;
-  final int number;
-  final String desc;
+  // ignore: non_constant_identifier_names
+  final String sciName, name, date, desc, lat_coord, long_coord;
+
   const TreeDetails({
     super.key,
     required this.id,
     required this.sciName,
     required this.name,
     required this.date,
-    required this.number,
-    required this.desc
+    required this.desc,
+    required this.lat_coord,
+    required this.long_coord
   });
+  
   @override
   // ignore: library_private_types_in_public_api
   _TreeDetailsState createState() => _TreeDetailsState();
 }
 
 class _TreeDetailsState extends State<TreeDetails> {
-  final _treesStream = 
-    Supabase.instance.client.from('Plant').stream(primaryKey: ['id']);
   late int id;
-  late String sciName;
-  late String name;
-  late String date;
-  late int number;
-  late String desc;
-  
-  @override
-  void initState() {
-    super.initState();
-    id = widget.id;
-    sciName = widget.sciName;
-    name = widget.name;
-    date = widget.date;
-    number = widget.number;
-    desc = widget.desc;
-  }
+  late String sciName, name, date, desc, lat_coord, long_coord;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         top: false,
-        child: Stack(
+        child: Column(
           children: [
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
@@ -157,14 +138,6 @@ class _TreeDetailsState extends State<TreeDetails> {
                                 )
                               ),
                               Text(
-                                'No. of trees planted: $number',
-                                style: const TextStyle(
-                                  fontFamily: 'Readex Pro',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300,
-                                )
-                              ),
-                              Text(
                                 'Status: $date',
                                 style: const TextStyle(
                                   fontFamily: 'Readex Pro',
@@ -174,6 +147,14 @@ class _TreeDetailsState extends State<TreeDetails> {
                               ),
                               Text(
                                 'Other areas: $date',
+                                style: const TextStyle(
+                                  fontFamily: 'Readex Pro',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300,
+                                )
+                              ),
+                              Text(
+                                'Coords: $lat_coord, $long_coord',
                                 style: const TextStyle(
                                   fontFamily: 'Readex Pro',
                                   fontSize: 14,
@@ -209,59 +190,9 @@ class _TreeDetailsState extends State<TreeDetails> {
                 )
               )
             ),
-            Align(
-              alignment: const AlignmentDirectional(0, 1),
-              child: Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(36, 0, 36, 20),
-                  child: InkWell(
-                  splashColor: Colors.transparent,
-                  focusColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onTap: () {
-                    _launchURL;
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    height: MediaQuery.sizeOf(context).height * 0.05,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF15D48A),
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color.fromARGB(255, 87, 87, 87),
-                          blurRadius: 5.0,
-                          spreadRadius: 2,
-                          offset: Offset(0,6)
-                        )
-                      ],
-                    ),
-                    child: const Align(
-                      alignment: AlignmentDirectional(0, 0),
-                      child: Text(
-                        'Click here for more information',
-                        style: TextStyle(
-                            fontFamily: 'Readex Pro',
-                            color: Colors.white,
-                            fontSize: 18,
-                        ),
-                      )
-                    )
-                  ),
-                )
-              )
-            )
           ]
         )
       )
     );
-  }
-  _launchURL() async {
-    final Uri url = Uri.parse('https://www.youtube.com'); // Replace this with your URL
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 }

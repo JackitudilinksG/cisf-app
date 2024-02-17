@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_supabase_test/main.dart';
+import 'package:flutter_supabase_test/home.dart';
+import 'package:flutter_supabase_test/scanner.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:location/location.dart';
 
-
-class LocationService {
-  Location location = Location();
-
-  Future<bool> requestPermission() async {
-    final permission = await location.requestPermission();
-    return permission == PermissionStatus.granted;
-  }
-}
+import 'package:geolocator/geolocator.dart';
 
 class TreesScreen extends StatefulWidget {
-  const TreesScreen({super.key});
+  const TreesScreen({super.key, required this.qrResult});
+
+  final String qrResult;
+  
   @override
+  // ignore: library_private_types_in_public_api
   _TreesScreenState createState() => _TreesScreenState();
 }
 
@@ -24,10 +20,16 @@ class _TreesScreenState extends State<TreesScreen> {
   String sciName = 'check code, something wrong';
   late String name;
   late DateTime _datePicked;
-  final LocationService locationService = LocationService();
-  String? latitude;
-  String? longitude;
+  late String latitude;
+  late String longitude;
 
+  late String qrResult;
+
+  @override
+  void initState() {
+    super.initState();
+    qrResult = widget.qrResult.isNotEmpty ? widget.qrResult : '-1';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +77,7 @@ class _TreesScreenState extends State<TreesScreen> {
                         ],
                       )
                     ),
+                    //cameraButton
                     Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(0, 32, 0, 0),
                       child: Container(
@@ -102,13 +105,13 @@ class _TreesScreenState extends State<TreesScreen> {
                         ),
                       ),
                     ),
-                    const Align(
-                      alignment: AlignmentDirectional(-1, 0),
+                    Align(
+                      alignment: const AlignmentDirectional(-1, 0),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(16, 16, 0, 0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 0, 0),
                         child: Text(
-                          'Enter Plant Details',
-                          style: TextStyle(
+                          'Enter Plant Details $qrResult',
+                          style: const TextStyle(
                             fontFamily: 'Readex Pro',
                             fontSize: 17,
                             fontWeight: FontWeight.w600,
@@ -116,6 +119,7 @@ class _TreesScreenState extends State<TreesScreen> {
                         ),
                       ),
                     ),
+                    //enterPlantName
                     Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 8, 0),
                       child: TextFormField(
@@ -166,6 +170,7 @@ class _TreesScreenState extends State<TreesScreen> {
                           },
                       )
                     ),
+                    //enterPlantSciName
                     Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 8, 0),
                       child: TextFormField(
@@ -216,6 +221,7 @@ class _TreesScreenState extends State<TreesScreen> {
                           },
                       )
                     ),
+                    //setDate
                     Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 8, 0),
                         child: InkWell(
@@ -224,7 +230,7 @@ class _TreesScreenState extends State<TreesScreen> {
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            final DateTime? _datePickedDate = await showDatePicker(
+                            final DateTime? datePickedDate = await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime(1900),
@@ -244,9 +250,9 @@ class _TreesScreenState extends State<TreesScreen> {
                                 );
                               },
                             );
-                            if (_datePickedDate != null) {
+                            if (datePickedDate != null) {
                               setState(() {
-                                _datePicked = _datePickedDate;
+                                _datePicked = datePickedDate;
                               });
                             }
                           },
@@ -282,17 +288,19 @@ class _TreesScreenState extends State<TreesScreen> {
                           ),
                         ),
                     ),
+                    //getLocation
                     Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 8, 20),
+                      padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 8, 0),
                       child: InkWell(
                         splashColor: Colors.transparent,
                         focusColor: Colors.transparent,
                         hoverColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onTap: () async {
-                          _onLocationButtonPressed(context);
+                          Position position = await _determinePosition();
+                          latitude = position.latitude.toString();
+                          longitude = position.longitude.toString();
                         },
-                        
                         child: Container(
                           width: double.infinity,
                           height: MediaQuery.of(context).size.height * 0.07,
@@ -324,11 +332,59 @@ class _TreesScreenState extends State<TreesScreen> {
                           ),
                         ),
                       ),
+                    ),
+                    //scanQR
+                    Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 8, 20),
+                      child: InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => QRScannerWidget())
+                          );
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.height * 0.07,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF0EBD8D),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                                child: Icon(
+                                  Icons.qr_code,
+                                  color: Colors.white,
+                                  size: 26,
+                                ),
+                              ),
+                              Text(
+                                'Scan QR',
+                                style: TextStyle(
+                                  fontFamily: 'Readex Pro',
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),    
                   ]
                 ),
               ),
             ),
+            //save
             Align(
               alignment: const AlignmentDirectional(0, 1),
               child: Padding(
@@ -339,25 +395,43 @@ class _TreesScreenState extends State<TreesScreen> {
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: () async {
-                    await Supabase.instance.client
-                    .from('Plant')
-                    .insert({
-                      'name': name,
-                      'sci_name': sciName,
-                      'date': '${_datePicked.year}-${_datePicked.month}-${_datePicked.day}',
-                      'qr_code': 'test sample text',
-                      'img_link': 'test sample text',
-                      'desc': 'test sample text',
-                      'location': 'test sample text',
-                      'number': 6969,
-                      'latitude': latitude,
-                      'longitude': longitude,
-                    });
-                    // ignore: use_build_context_synchronously
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const MyApp()),
-                    );
+                    // ignore: unrelated_type_equality_checks
+                    if(qrResult == -1) {
+                      AlertDialog(
+                        title: const Text('AlertDialog Title'),
+                        content: const Text('AlertDialog description'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Cancel'),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'OK'),
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    } else {
+                      await Supabase.instance.client
+                      .from('Plant')
+                      .insert({
+                        'id': qrResult,
+                        'name': name,
+                        'sci_name': sciName,
+                        'date': '${_datePicked.year}-${_datePicked.month}-${_datePicked.day}',
+                        'qr_code': 'test sample text',
+                        'img_link': 'test sample text',
+                        'desc': 'test sample text',
+                        'location': 'test sample text',
+                        'latitude': latitude,
+                        'longitude': longitude,
+                      });
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const MyHomePage(email: '',)),
+                      );
+                    }
                   },
                   child: Container(
                     width: double.infinity,
@@ -394,24 +468,35 @@ class _TreesScreenState extends State<TreesScreen> {
       ),     
     );
   }
-  Future<void> _onLocationButtonPressed(BuildContext context) async {
-    try {
-      bool permissionGranted = await locationService.requestPermission();
-      if (permissionGranted) {
-        // Location permission granted, you can proceed with further actions
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Location permission granted')),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Location permission denied')),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to request location permission: $e')),
-      );
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
     }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        
+        return Future.error('Location permissions are denied');
+      }
+    }
+    
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately. 
+      return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
   }
 
   @override
