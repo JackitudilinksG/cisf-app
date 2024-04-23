@@ -1,3 +1,5 @@
+//login page
+
 import 'package:flutter/material.dart';
 import 'package:flutter_supabase_test/home.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -65,19 +67,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
           padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
         child: Column(
           children: [
-            //appbar
-            const Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
-              child: Text(
-                'GeoTag',
-                style: TextStyle(
-                  fontFamily: 'Readex Pro',
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w300,
-                ),
-              )
-            ),
             //email input
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),

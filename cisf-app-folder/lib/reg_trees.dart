@@ -1,3 +1,5 @@
+//page to register new trees
+
 import 'package:flutter/material.dart';
 import 'package:flutter_supabase_test/home.dart';
 import 'package:flutter_supabase_test/scanner.dart';
@@ -28,7 +30,7 @@ class _TreesScreenState extends State<TreesScreen> {
   @override
   void initState() {
     super.initState();
-    qrResult = widget.qrResult.isNotEmpty ? widget.qrResult : '-1';
+    qrResult = widget.qrResult.isNotEmpty ? widget.qrResult : '10';
   }
 
   @override
@@ -416,9 +418,9 @@ class _TreesScreenState extends State<TreesScreen> {
                       .from('Plant')
                       .insert({
                         'id': qrResult,
+                        'date': '${_datePicked.year}-${_datePicked.month}-${_datePicked.day}',
                         'name': name,
                         'sci_name': sciName,
-                        'date': '${_datePicked.year}-${_datePicked.month}-${_datePicked.day}',
                         'qr_code': 'test sample text',
                         'img_link': 'test sample text',
                         'desc': 'test sample text',

@@ -1,5 +1,6 @@
-import 'dart:io';
+//scanner page
 
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_supabase_test/reg_trees.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
