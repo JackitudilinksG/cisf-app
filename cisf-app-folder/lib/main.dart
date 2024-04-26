@@ -109,8 +109,26 @@ class _MyLoginPageState extends State<MyLoginPage> {
               padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
               child: InkWell(
                 onTap: () async {
-                  print("FIX AUTH LOGIN");
-                  emailValidate();
+                  //emailValidate();
+                  try {
+                    if (emailId == null) {
+                      throw Exception("Email is not provided.");
+                    }
+                    print("FIX AUTH LOGIN");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyHomePage(email: emailId)
+                      )
+                    );
+                  } catch(e) {
+                    print("Error: $e");
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Email is not provided"),
+                      ),
+                    );
+                  }
                 },
                 child: Container(
                   width: double.infinity,
@@ -155,12 +173,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
         style: TextStyle(color: Colors.red),
       );
     } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MyHomePage(email: emailId)
-        )
-      );
+      
     }
   }
 }
