@@ -54,7 +54,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
     super.dispose();
   }
 
-
   late String emailId;
   
   @override
@@ -79,11 +78,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
                     fontSize: 16.0,
                     color: Colors.black,
                   ),
-                  hintStyle: const TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16.0,
-                    color: Color(0xFF0EBD8D),
-                  ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: const BorderSide(
                       color: Color(0xFF0EBD8D),
@@ -93,21 +87,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   ),
                   focusedBorder: UnderlineInputBorder(
                     borderSide: const BorderSide(
-                      color: Color(0xFF0EBD8D),
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  errorBorder: UnderlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.red,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  focusedErrorBorder: UnderlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.orange,
+                      color: Color.fromARGB(255, 0, 255, 187),
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(8),
@@ -116,20 +96,21 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 onChanged: (newValue) {
                   emailId = newValue;
                 },
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+              child: Text(
+                'Do not leave above blank',
+                style: TextStyle(color: Colors.red),
               )
             ),
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
               child: InkWell(
                 onTap: () async {
-                  final email = _emailcontroller.text.trim();
                   print("FIX AUTH LOGIN");
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MyHomePage(email: emailId)
-                    )
-                  );
+                  emailValidate();
                 },
                 child: Container(
                   width: double.infinity,
@@ -149,7 +130,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   child: const Align(
                     alignment: AlignmentDirectional(0, 0),
                     child: Text(
-                      'Login',
+                      'Receive Login Link',
                       style: TextStyle(
                         fontFamily: 'Readex Pro',
                         color: Colors.white,
@@ -165,5 +146,21 @@ class _MyLoginPageState extends State<MyLoginPage> {
       )
       ),
     );
+  }
+
+  Widget ?emailValidate() {
+    if(emailId == Null){
+      return const Text(
+        'Email is required',
+        style: TextStyle(color: Colors.red),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MyHomePage(email: emailId)
+        )
+      );
+    }
   }
 }
