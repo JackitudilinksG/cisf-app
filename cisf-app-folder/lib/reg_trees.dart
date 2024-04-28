@@ -1,8 +1,9 @@
 //page to register new trees
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_supabase_test/home.dart';
-import 'package:flutter_supabase_test/scanner.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:geolocator/geolocator.dart';
@@ -26,11 +27,29 @@ class _TreesScreenState extends State<TreesScreen> {
   late String longitude;
 
   late String qrResult;
-
+  String _scanBarcode = 'Unknown';
+  
   @override
   void initState() {
     super.initState();
-    qrResult = widget.qrResult.isNotEmpty ? widget.qrResult : '10';
+    qrResult = widget.qrResult.isNotEmpty ? widget.qrResult : '12';
+  }
+
+  Future<void> scanQR() async {
+    String barcodeScanRes;
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.QR);
+      print(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _scanBarcode = barcodeScanRes;
+    });
   }
 
   @override
@@ -226,69 +245,69 @@ class _TreesScreenState extends State<TreesScreen> {
                     //setDate
                     Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 8, 0),
-                        child: InkWell(
-                          splashColor: Colors.transparent,
-                          focusColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onTap: () async {
-                            final DateTime? datePickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(1900),
-                              lastDate: DateTime.now(),
-                              builder: (context, child) {
-                                return Theme(
-                                  data: ThemeData.light().copyWith(
-                                    colorScheme: const ColorScheme.light(
-                                      primary: Color(0xFF0EBD8D),
-                                      onPrimary: Color.fromARGB(255, 255, 89, 144),
-                                    ),
-                                    buttonTheme: const ButtonThemeData(
-                                      textTheme: ButtonTextTheme.primary,
-                                    ),
+                      child: InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () async {
+                          final DateTime? datePickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now(),
+                            builder: (context, child) {
+                              return Theme(
+                                data: ThemeData.light().copyWith(
+                                  colorScheme: const ColorScheme.light(
+                                    primary: Color(0xFF0EBD8D),
+                                    onPrimary: Color.fromARGB(255, 255, 89, 144),
                                   ),
-                                  child: child!,
-                                );
-                              },
-                            );
-                            if (datePickedDate != null) {
-                              setState(() {
-                                _datePicked = datePickedDate;
-                              });
-                            }
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            height: MediaQuery.of(context).size.height * 0.07,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF0EBD8D),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                  child: Icon(
-                                    Icons.calendar_today,
-                                    color: Colors.white,
-                                    size: 26,
+                                  buttonTheme: const ButtonThemeData(
+                                    textTheme: ButtonTextTheme.primary,
                                   ),
                                 ),
-                                Text(
-                                  'Select Date',
-                                  style: TextStyle(
-                                    fontFamily: 'Readex Pro',
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                  )
+                                child: child!,
+                              );
+                            },
+                          );
+                          if (datePickedDate != null) {
+                          setState(() {
+                              _datePicked = datePickedDate;
+                            });
+                          }
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.height * 0.07,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF0EBD8D),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                                child: Icon(
+                                  Icons.calendar_today,
+                                  color: Colors.white,
+                                  size: 26,
                                 ),
-                              ],
-                            ),
+                              ),
+                              Text(
+                                'Select Date',
+                                style: TextStyle(
+                                  fontFamily: 'Readex Pro',
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                )
+                              ),
+                            ],
                           ),
                         ),
+                      ),
                     ),
                     //getLocation
                     Padding(
@@ -344,11 +363,8 @@ class _TreesScreenState extends State<TreesScreen> {
                         hoverColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onTap: () async {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => QRScannerWidget())
-                          );
+                          scanQR();
+                          const Text('Start QR scan');
                         },
                         child: Container(
                           width: double.infinity,
@@ -370,7 +386,7 @@ class _TreesScreenState extends State<TreesScreen> {
                                 ),
                               ),
                               Text(
-                                'Scan QR',
+                                'Scan QR real',
                                 style: TextStyle(
                                   fontFamily: 'Readex Pro',
                                   color: Colors.white,
@@ -381,9 +397,12 @@ class _TreesScreenState extends State<TreesScreen> {
                           ),
                         ),
                       ),
-                    ),    
+                    ),
+                    Text('Scan result : $_scanBarcode\n',
+                      style: const TextStyle(fontSize: 20)
+                    )
                   ]
-                ),
+                )
               ),
             ),
             //save
