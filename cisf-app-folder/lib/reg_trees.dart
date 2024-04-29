@@ -26,8 +26,7 @@ class _TreesScreenState extends State<TreesScreen> {
   late String latitude;
   late String longitude;
 
-  late String qrResult;
-  String _scanBarcode = 'Unknown';
+  late String qrResult = 'Unknown';
   
   @override
   void initState() {
@@ -48,7 +47,7 @@ class _TreesScreenState extends State<TreesScreen> {
     if (!mounted) return;
 
     setState(() {
-      _scanBarcode = barcodeScanRes;
+      qrResult = barcodeScanRes;
     });
   }
 
@@ -398,7 +397,7 @@ class _TreesScreenState extends State<TreesScreen> {
                         ),
                       ),
                     ),
-                    Text('Scan result : $_scanBarcode\n',
+                    Text('Scan result : $qrResult\n',
                       style: const TextStyle(fontSize: 20)
                     )
                   ]
