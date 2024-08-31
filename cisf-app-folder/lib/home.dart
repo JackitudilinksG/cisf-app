@@ -131,9 +131,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                     Align(
-                      alignment: AlignmentDirectional(-1, 0),
+                      alignment: const AlignmentDirectional(-1, 0),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(8, 32, 0, 0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(8, 32, 0, 0),
                           child: Text(
                             'Planted by $emailId',
                             style: const TextStyle(

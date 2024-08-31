@@ -1,4 +1,4 @@
-# flutter_supabase_test
+# cisf_emulator_test
 
 A new Flutter project.
 
